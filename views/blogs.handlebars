@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Блог</title>
+</head>
+<style>
+    .blog-item {
+        text-align: center;
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .blog-item img {
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    .blog-item h2 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+    .blog-item p {
+        margin-bottom: 10px;
+    }
+</style>
+<body>
+<h1>Список блогов</h1>
+
+{{#each blogs}}
+    <div class="blog-item">
+        <h2>{{title}}</h2>
+        <img src="{{image}}" alt="{{title}} logo">
+        <p>{{desc}}</p>
+        <button class="delete-button" onclick="deleteBrand('{{id}}')">Удалить</button>
+        <button class="edit-button" onclick="edit('{{id}}')">Редактировать</button>
+    </div>
+{{/each}}
+
+
+
+<script>
+
+    updateAuthUI()
+
+    async function edit(blogId) {
+        window.location.href=`/blog/edit/${blogId}`
+    }
+
+
+    async function deleteBrand(blogId) {
+        try {
+            const response = await fetch(`/deleteBlog/${blogId}`, {
+                method: 'DELETE',
+
+            });
+
+            if (response.ok) {
+                console.log('Brand deleted successfully');
+
+                window.location.reload();
+            } else {
+                const errorData = await response.json();
+                console.error('Error deleting brand:', errorData);
+            }
+        } catch (error) {
+            console.error('Error deleting brand:', error);
+        }
+    }
+</script>
+</body>
+</html>

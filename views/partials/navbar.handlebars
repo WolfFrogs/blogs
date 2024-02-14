@@ -1,0 +1,52 @@
+<nav>
+    <button id="logoutButton" style="display: none;" onclick="logout()">Выйти</button>
+    <a id="loginButton" href="/login">Войти</a>
+    <a id="registerButton" href="/register">Регистрация</a>
+    <a id="createBlog" href="/createBlog">Добавить блог</a>
+</nav>
+
+<script>
+    function updateAuthUI() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const userRole = localStorage.getItem('userRole');
+
+        if (isAuthenticated && userRole === 'admin') {
+            document.getElementById('logoutButton').style.display = 'block';
+            document.querySelectorAll('.edit-button').forEach(btn => btn.style.display = 'inline-block');
+            document.querySelectorAll('.delete-button').forEach(btn => btn.style.display = 'inline-block');
+            if (document.getElementById('createBlog')) {
+                document.getElementById('createBlog').style.display = 'block';
+            }
+            document.getElementById('loginButton').style.display = 'none';
+            document.getElementById('registerButton').style.display = 'none';
+        } else if (isAuthenticated && userRole === 'user') {
+            document.querySelectorAll('.edit-button').forEach(btn => btn.style.display = 'none');
+            document.querySelectorAll('.delete-button').forEach(btn => btn.style.display = 'none');
+            if (document.getElementById('createBlog')) {
+                document.getElementById('createBlog').style.display = 'none';
+            }
+            document.getElementById('logoutButton').style.display = 'block';
+            document.getElementById('loginButton').style.display = 'none';
+            document.getElementById('registerButton').style.display = 'none';
+        } else {
+            document.getElementById('logoutButton').style.display = 'none';
+            document.querySelectorAll('.edit-button').forEach(btn => btn.style.display = 'none');
+            document.querySelectorAll('.delete-button').forEach(btn => btn.style.display = 'none');
+            if (document.getElementById('createBlog')) {
+                document.getElementById('createBlog').style.display = 'none';
+            }
+            document.getElementById('loginButton').style.display = 'block';
+            document.getElementById('registerButton').style.display = 'block';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', updateAuthUI);
+    function logout() {
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('userRole')
+        updateAuthUI();
+        window.location.href = '/login';
+    }
+
+</script>
+
